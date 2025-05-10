@@ -3,10 +3,11 @@ import { Alert, Button, Form, Row, Col, Stack } from "react-bootstrap";
 import { AuthContext } from "../context/AuthContext";
 
 const Register = () => {
-  const { registerInfo, updateRegisterInfo } = useContext(AuthContext);
+  const { registerInfo, updateRegisterInfo, registerUser, registerError, isRegisterLoading } =
+    useContext(AuthContext);
   return (
     <>
-      <Form>
+      <Form onSubmit={registerUser}>
         <Row
           style={{
             height: "100vh",
@@ -37,27 +38,31 @@ const Register = () => {
                 type="password"
                 placeholder="Пароль"
                 onChange={(e) =>
-                  updateRegisterInfo({ ...registerInfo, password: e.target.value })
+                  updateRegisterInfo({
+                    ...registerInfo,
+                    password: e.target.value,
+                  })
                 }
               />
               <Button variant="primary" type="submit">
-                Зарегистрироваться
+                {isRegisterLoading ? "Создание аккаунта" : "Зарегистрировать"}
               </Button>
-
-              <Alert
-                variant="danger"
-                style={{
-                  padding: "10px",
-                }}
-              >
-                <p
+              {registerError?.error && (
+                <Alert
+                  variant="danger"
                   style={{
-                    marginBottom: "0",
+                    padding: "10px",
                   }}
                 >
-                  Возникла ошибка
-                </p>
-              </Alert>
+                  <p
+                    style={{
+                      marginBottom: "0",
+                    }}
+                  >
+                    {registerError?.message}
+                  </p>
+                </Alert>
+              )}
             </Stack>
           </Col>
         </Row>
