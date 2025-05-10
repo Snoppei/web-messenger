@@ -5,3 +5,7 @@ body {
   --bs-body-bg: rgb(40, 40, 40);
   --bs-body-color: white;
 }
+
+::placeholder {
+  color: white !important;
+}
