@@ -1,9 +1,14 @@
+import { useContext } from "react";
 import { Alert, Button, Form, Row, Col, Stack } from "react-bootstrap";
+import { AuthContext } from "../context/AuthContext";
 
 const Login = () => {
+  const { loginUser, loginError, loginInfo, updateLoginInfo, isLoginLoading } =
+    useContext(AuthContext);
+
   return (
     <>
-      <Form>
+      <Form onSubmit={loginUser}>
         <Row
           style={{
             height: "100vh",
@@ -16,26 +21,39 @@ const Login = () => {
             <Stack gap={3}>
               <h2>Авторизация</h2>
 
-              <Form.Control type="email" placeholder="Email" />
-              <Form.Control type="password" placeholder="Пароль" />
+              <Form.Control
+                type="email"
+                placeholder="Email"
+                onChange={(e) =>
+                  updateLoginInfo({ ...loginInfo, email: e.target.value })
+                }
+              />
+              <Form.Control
+                type="password"
+                placeholder="Пароль"
+                onChange={(e) =>
+                  updateLoginInfo({ ...loginInfo, password: e.target.value })
+                }
+              />
               <Button variant="primary" type="submit">
-                Войти
+                {isLoginLoading? "Загрузка" : "Войти"}
               </Button>
-
-              <Alert
-                variant="danger"
-                style={{
-                  padding: "10px",
-                }}
-              >
-                <p
+              {loginError?.error && (
+                <Alert
+                  variant="danger"
                   style={{
-                    marginBottom: "0",
+                    padding: "10px",
                   }}
                 >
-                  Возникла ошибка
-                </p>
-              </Alert>
+                  <p
+                    style={{
+                      marginBottom: "0",
+                    }}
+                  >
+                    {loginError?.message}
+                  </p>
+                </Alert>
+              )}
             </Stack>
           </Col>
         </Row>
