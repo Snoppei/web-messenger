@@ -13,6 +13,14 @@ body {
 .all-users {
   display: flex;
   margin-bottom: 1rem;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.all-users.show {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .single-user {
@@ -28,6 +36,11 @@ body {
   position: relative;
   border-bottom: 1px solid rgb(100, 100, 100);
   width: 380px;
+}
+
+.user-search-input {
+  background-color: transparent;
+  border: none;
 }
 
 .user-card .text-content {
