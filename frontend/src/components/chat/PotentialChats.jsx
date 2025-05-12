@@ -28,7 +28,7 @@ const PotentialChats = () => {
     <div className="potential-chats mb-2">
       <input
         type="text"
-        placeholder="Найти пользователя"
+        placeholder="Введите поисковый запрос"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
         className="form-control mb-1"
