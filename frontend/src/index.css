@@ -116,9 +116,22 @@ body {
   background: rgb(30, 30, 30);
   padding: 1rem;
 }
+
+input[type=file] {
+  display: none;
+}
+
+.input-file {
+  width: 32px;
+  height: 32px;
+  background-color: transparent;
+  display: block;
+  cursor: pointer;
+}
+
 .send-btn {
   border: none;
-  background: rgba(72, 112, 223, 1);
+  background: #0dcaf0;
   height: 40px;
   width: 40px;
   border-radius: 50%;

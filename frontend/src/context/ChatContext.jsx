@@ -13,6 +13,8 @@ export const ChatContextProvider = ({ children, user }) => {
   const [messages, setMessages] = useState(null);
   const [isMessagesLoading, setIsMessagesLoading] = useState(false);
   const [messagesError, setMessagesError] = useState(null);
+  const [sendTextMessageError, setSendTextMessageError] = useState(null);
+  const [newMessage, setNewMessage] = useState(null);
 
   console.log("Messages", messages);
 
@@ -65,21 +67,47 @@ export const ChatContextProvider = ({ children, user }) => {
 
   useEffect(() => {
     const getMessages = async () => {
-        setIsMessagesLoading(true);
-        setMessagesError(null);
-        const response = await getRequest(`${baseUrl}/messages/${currentChat?._id}`);
+      setIsMessagesLoading(true);
+      setMessagesError(null);
+      const response = await getRequest(
+        `${baseUrl}/messages/${currentChat?._id}`
+      );
 
-        setIsMessagesLoading(false);
+      setIsMessagesLoading(false);
 
-        if (response.error) {
-          return setMessagesError(response);
-        }
+      if (response.error) {
+        return setMessagesError(response);
+      }
 
-        setMessages(response);
+      setMessages(response);
     };
 
     getMessages();
   }, [currentChat]);
+
+  const sendTextMessage = useCallback(
+    async (textMessage, sender, currentChatId, setTextMessage) => {
+      if (!textMessage) return console.log("Напиши что-нибудь");
+
+      const response = await postRequest(
+        `${baseUrl}/messages`,
+        JSON.stringify({
+          chatId: currentChatId,
+          senderId: sender._id,
+          text: textMessage,
+        })
+      );
+
+      if (response.error) {
+        return setSendTextMessageError(response);
+      }
+
+      setNewMessage(response);
+      setMessages((prev)=>[...prev, response]);
+      setTextMessage("");
+    },
+    []
+  );
 
   const updateCurrentChat = useCallback((chat) => {
     setCurrentChat(chat);
@@ -112,7 +140,8 @@ export const ChatContextProvider = ({ children, user }) => {
         messages,
         isMessagesLoading,
         messagesError,
-        currentChat
+        currentChat,
+        sendTextMessage
       }}
     >
       {children}
