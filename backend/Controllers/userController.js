@@ -15,13 +15,13 @@ const registerUser = async (req, res) => {
 
         let user = await userModel.findOne({email});
     
-        if(user) return res.status(400).json("User with the given email already exists...");
+        if(user) return res.status(400).json("Пользователь с такой электронной почтой уже существует");
     
-        if(!name || !email || !password) return res.status(400).json("All fields are required...");
+        if(!name || !email || !password) return res.status(400).json("Все поля должны быть заполнены");
     
-        if(!validator.isEmail(email)) return res.status(400).json("Email must be a valid email...");
+        if(!validator.isEmail(email)) return res.status(400).json("Некорректная почта");
     
-        if(!validator.isStrongPassword(password)) return res.status(400).json("Password must be a strong password...");
+        if(!validator.isStrongPassword(password)) return res.status(400).json("Пароль должен содержать латинские заглавные и строчные буквы, цифры и символы");
     
         user = new userModel({name, email, password});
     
@@ -44,10 +44,10 @@ const loginUser = async(req, res) => {
 
     try{
         let user = await userModel.findOne({email});
-        if(!user) return res.status(400).json("Invalid email or pswrd...");
+        if(!user) return res.status(400).json("Некорректная электронная почта или пароль");
         const isValidPassword = await bcrypt.compare(password, user.password);
 
-        if(!isValidPassword) return res.status(400).json("Invalid email or password...");
+        if(!isValidPassword) return res.status(400).json("Некорректная электронная почта или пароль");
 
         const token = createToken(user._id);
     
